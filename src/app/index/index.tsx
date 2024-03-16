@@ -1,8 +1,22 @@
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 
 import { styles } from "./styles"
 
+import { Ingredient } from "@//components/Ingredient";
+import { useState } from "react";
+
 export default function Index() {
+    const [selected, setSelected] = useState<string[]>([]);
+
+    function handleToggleSelected(value: string) {    //Função para ficar invertendo se ta selecionado
+        if (selected.includes(value)) {  //Verifico se la dentro tem o valor que to querendo selecionar
+            return setSelected((state) => state.filter((item) => item !== value))   //Faço um filtro e retorno só o valor dos itens que são diferentes
+        }
+
+        setSelected((state) => [...state, value])   //Pego tudo que tem dentro do estado mais o novo valor 
+        console.log(selected)
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>
@@ -13,6 +27,19 @@ export default function Index() {
             <Text style={styles.message}>
                 Descubra receitas baseadas nos produtos que você escolheu.
             </Text>
+
+            <ScrollView contentContainerStyle={styles.ingredients} showsVerticalScrollIndicator={false}>
+                {
+                    Array.from({ length: 100 }).map((item, index) => (
+                        <Ingredient
+                            key={index}
+                            name="Tomate"
+                            image=""
+                            selected={selected.includes(String(index))}
+                            onPress={() => handleToggleSelected(String(index))} />
+                    ))}
+
+            </ScrollView>
         </View>
     )
 }
