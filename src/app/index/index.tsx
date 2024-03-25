@@ -1,9 +1,10 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Alert } from "react-native";
 
 import { styles } from "./styles"
 
 import { Ingredient } from "@//components/Ingredient";
 import { useState } from "react";
+import { Selected } from "@//components/Selected";
 
 export default function Index() {
     const [selected, setSelected] = useState<string[]>([]);
@@ -15,6 +16,14 @@ export default function Index() {
 
         setSelected((state) => [...state, value])   //Pego tudo que tem dentro do estado mais o novo valor 
         console.log(selected)
+    }
+
+    function handleClearSelected() {
+        //1°parametro:titulo, 2°:mensagem, 3°:array com opções
+        Alert.alert("Limpar", "Deseja limpar tudo?", [
+            { text: "Não", style: "cancel" },
+            { text: "Sim", onPress: () => setSelected([]) },
+        ])
     }
 
     return (
@@ -40,6 +49,12 @@ export default function Index() {
                     ))}
 
             </ScrollView>
+            {selected.length > 0 && (   //Se for maior que 0 itens selecionados, mostro a caixinha
+                <Selected
+                    quantity={selected.length}
+                    onClear={handleClearSelected}
+                    onSearch={() => { }}
+                />)}
         </View>
     )
 }
