@@ -1,4 +1,5 @@
 import { View, Text, ScrollView, Alert } from "react-native";
+import { router } from "expo-router"
 
 import { styles } from "./styles"
 
@@ -26,6 +27,10 @@ export default function Index() {
         ])
     }
 
+    function handleSearch() {
+        router.navigate("/recipes/")
+    }
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>
@@ -47,14 +52,15 @@ export default function Index() {
                             selected={selected.includes(String(index))}
                             onPress={() => handleToggleSelected(String(index))} />
                     ))}
-
             </ScrollView>
+
             {selected.length > 0 && (   //Se for maior que 0 itens selecionados, mostro a caixinha
                 <Selected
                     quantity={selected.length}
                     onClear={handleClearSelected}
-                    onSearch={() => { }}
-                />)}
+                    onSearch={handleSearch}
+                />
+            )}
         </View>
     )
 }
