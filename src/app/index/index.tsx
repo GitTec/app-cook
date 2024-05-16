@@ -1,14 +1,17 @@
 import { View, Text, ScrollView, Alert } from "react-native";
 import { router } from "expo-router"
 
+import { services } from "@//services"
+
 import { styles } from "./styles"
 
 import { Ingredient } from "@//components/Ingredient";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Selected } from "@//components/Selected";
 
 export default function Index() {
     const [selected, setSelected] = useState<string[]>([]);
+    const [ingredients, setIngredients] = useState<IngredientResponse[]>([])
 
     function handleToggleSelected(value: string) {    //Função para ficar invertendo se ta selecionado
         if (selected.includes(value)) {  //Verifico se la dentro tem o valor que to querendo selecionar
@@ -31,6 +34,10 @@ export default function Index() {
         router.navigate("/recipes/")
     }
 
+    useEffect(() => {
+        services.ingredients.findAll().then(setIngredients)
+    }, [])
+
     return (
         <View style={styles.container}>
             <Text style={styles.title}>
@@ -42,16 +49,18 @@ export default function Index() {
                 Descubra receitas baseadas nos produtos que você escolheu.
             </Text>
 
-            <ScrollView contentContainerStyle={styles.ingredients} showsVerticalScrollIndicator={false}>
-                {
-                    Array.from({ length: 100 }).map((item, index) => (
-                        <Ingredient
-                            key={index}
-                            name="Tomate"
-                            image=""
-                            selected={selected.includes(String(index))}
-                            onPress={() => handleToggleSelected(String(index))} />
-                    ))}
+            <ScrollView
+                contentContainerStyle={styles.ingredients} showsVerticalScrollIndicator={false}
+            >
+                {ingredients.map((item) => (
+                    <Ingredient
+                        key={item.id}
+                        name={item.name}
+                        image={`${services.storage.imagePath}/${item.image}`}
+                        selected={selected.includes(item.id)}
+                        onPress={() => handleToggleSelected(item.id)}
+                    />
+                ))}
             </ScrollView>
 
             {selected.length > 0 && (   //Se for maior que 0 itens selecionados, mostro a caixinha

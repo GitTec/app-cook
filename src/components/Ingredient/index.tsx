@@ -18,9 +18,9 @@ export function Ingredient({
         //Pressable -- Componente de toque
         <Pressable style={[styles.container, selected && styles.selected]} {...rest}>
 
-            <Image source={require("@//assets/apple.png")} style={styles.image} />
+            <Image source={{uri: image}} style={styles.image} />
 
-            <Text style={styles.title}>Maça</Text>
+            <Text style={styles.title}>{name}</Text>
         </Pressable>
     )
 }

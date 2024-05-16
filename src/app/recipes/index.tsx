@@ -11,8 +11,8 @@ export default function Recipes() {
         <View style={styles.container}>
             <View style={styles.header}>
                 <MaterialIcons
-                    name="arrow-back"
                     size={32}
+                    name="arrow-back"
                     onPress={() => router.back()}
                 />
 
